@@ -13,7 +13,7 @@ def sleep():
 
 if __name__ == "__main__":
 	ncpus = 4
-	N = 100*ncpus
+	N = 10*ncpus
 	
 	print("{0:14s}{1}".format("Version", progress.__version__))
 	print("{0:14s}{1}".format("Platform", sys.platform))
@@ -77,3 +77,12 @@ if __name__ == "__main__":
 	tracker.report()
 	
 	print("\nTest SUCCESS!")
+
+	print("\nTesting Stopwatch:")
+
+	with progress.Stopwatch() as w:
+		sleep()
+	
+	#assert w.get_time() == SLEEP
+
+	#print("Stopwatch returned " + str(w))

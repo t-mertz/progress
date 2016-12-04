@@ -212,3 +212,51 @@ class Progress:
 		out_str = out_str.format("Total time passed:", lacommon.format_time(self.total(), ''), \
 								 "Avg. time per task:", lacommon.format_time(self.avg_tasks(), ''))
 		self._to_file(out_str, filename=self._filename)
+
+
+
+class Timer(object):
+	"""
+	Measures time between calls to set_initial() and set_final().
+	"""
+
+	def __init__(self):
+		self._t0 = self._t1 = None
+	
+	def set_initial(self):
+		self._t0 = time.time()
+	
+	def set_final(self):
+		self._t1 = time.time()
+
+	def get_time(self):
+		return (self._t1 - self._t0)
+	
+	def __str__(self):
+		return str(self.get_time())
+
+
+class Stopwatch(Timer):
+	"""
+	Measures time between calls to __enter__() and __exit__() and prints
+	to file.
+	"""
+
+	def __init__(self, file=None):
+		Timer.__init__(self)
+		if file is None:
+			self.file = sys.stdout
+		else:
+			self.file = outfile
+
+	def __enter__(self):
+		self.set_initial()
+	
+	def __exit__(self, type, value, traceback):
+		self.set_final()
+		print(self.get_time(), file=self.file)
+
+		if type is None:
+			return True
+		else:
+			return False
